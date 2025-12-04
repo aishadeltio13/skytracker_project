@@ -1,0 +1,7 @@
+# 1. Ignorar carpeta completa datalake_data
+datalake_data/
+
+# 2. Ignorar archivos específicos dentro de notebooks
+notebooks/airlines.csv
+notebooks/airports.csv 
+notebooks/flights.csv

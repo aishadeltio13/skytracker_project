@@ -1,0 +1,30 @@
+services:
+  # --- DATA LAKE (Almacenamiento) ---
+  minio:
+    image: minio/minio
+    container_name: datalake_minio
+    ports:
+      - "9000:9000" # API
+      - "9001:9001" # Consola Web
+    environment:
+      MINIO_ROOT_USER: minioadmin
+      MINIO_ROOT_PASSWORD: minioadmin
+    command: server /data --console-address ":9001"
+    volumes:
+      - ./datalake_data:/data
+
+  # --- JUPYTER + SPARK (Procesamiento) ---
+  jupyter:
+    image: jupyter/pyspark-notebook:latest
+    container_name: jupyter_lab_spark
+    ports:
+      - "8888:8888" # Interfaz Jupyter
+      - "4040:4040" # Interfaz Spark UI
+    environment:
+      - JUPYTER_ENABLE_LAB=yes
+      # ESTA LÍNEA ES CLAVE: Descarga los drivers para conectar Spark con MinIO (S3)
+      - PYSPARK_SUBMIT_ARGS=--packages org.apache.hadoop:hadoop-aws:3.3.4,com.amazonaws:aws-java-sdk-bundle:1.12.262 pyspark-shell
+    volumes:
+      - ./notebooks:/home/jovyan/work
+    user: root
+    command: start-notebook.sh --NotebookApp.token='' --NotebookApp.password=''
