@@ -5,3 +5,5 @@ datalake_data/
 notebooks/airlines.csv
 notebooks/airports.csv 
 notebooks/flights.csv
+notebooks/datos_powerbi
+notebooks/.ipynb_checkpoints 
